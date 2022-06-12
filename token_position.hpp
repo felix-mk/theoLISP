@@ -32,6 +32,14 @@ class TokenPosition{
 			this->m_col = 0;
 		}
 
+		friend bool operator== (const TokenPosition& a, const TokenPosition& b)noexcept{
+			return a.col() == b.col() && a.line() == b.line();
+		}
+
+		friend bool operator!= (const TokenPosition& a, const TokenPosition& b)noexcept{
+			return !(a == b);
+		}
+
 		friend std::ostream& operator<< (std::ostream& os, const TokenPosition pos)noexcept{
 			return os << "ln: " << pos.line() << ", col: " << pos.col();
 		}

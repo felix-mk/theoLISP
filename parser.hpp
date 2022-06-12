@@ -41,16 +41,19 @@ class Parser{
 		BaseNode* parse_instr_list()noexcept{
 			const TokenPosition pos = this->m_token.pos();
 
-			this->expect(TokenType::L_PAR);
-			this->read_next_token();
+			this->expect_and_read(TokenType::L_PAR);
 
 			InstrListNode* list = new InstrListNode{pos};
-			while(this->m_token != TokenType::R_PAR && this->m_token != TokenType::CONTR_EOF)
+			while(this->m_token != TokenType::R_PAR && this->m_token != TokenType::CONTR_EOF){
+				const TokenPosition prev_pos = this->m_token.pos();
 				list->add(this->parse_instr());
 
-			this->expect(TokenType::R_PAR);
-			this->read_next_token();
+				// Prevention of endless loops in case of syntax errors.
+				if(prev_pos == this->m_token.pos())
+					this->read_next_token();
+			}
 
+			this->expect_and_read(TokenType::R_PAR);
 			return list;
 		}
 
@@ -58,9 +61,7 @@ class Parser{
 		BaseNode* parse_instr()noexcept{
 			BaseNode* ret{};
 
-			this->expect(TokenType::L_PAR);
-			this->read_next_token();
-
+			this->expect_and_read(TokenType::L_PAR);
 			switch(this->m_token.type()){
 				case TokenType::SET:
 					ret = this->parse_assign();
@@ -77,13 +78,11 @@ class Parser{
 						TokenType::IF,
 						TokenType::WHILE
 					);
-					this->read_next_token();
 
 					ret = new ErrorNode{this->m_token.pos()};
 			}
 
-			this->expect(TokenType::R_PAR);
-			this->read_next_token();
+			this->expect_and_read(TokenType::R_PAR);
 
 			return ret;
 		}
@@ -103,8 +102,6 @@ class Parser{
 				return new AssignNode{var_name, value, pos};
 			}else{
 				this->expect(TokenType::IDENT);
-				this->read_next_token();
-
 				return new ErrorNode{pos};
 			}
 		}
@@ -167,7 +164,6 @@ class Parser{
 						TokenType::IDENT,
 						TokenType::L_PAR
 					);
-					this->read_next_token();
 			}
 
 			return ret;
@@ -178,7 +174,9 @@ class Parser{
 			const TokenPosition pos = this->m_token.pos();
 			const TokenType arith_type = this->m_token.type();
 
+			this->debug_expect(TokenType::ADD, TokenType::SUB, TokenType::MUL);
 			this->read_next_token();
+
 			BaseNode* const param1 = this->parse_exp();
 			BaseNode* const param2 = this->parse_exp();
 
@@ -195,7 +193,6 @@ class Parser{
 						TokenType::SUB,
 						TokenType::MUL
 					);
-					this->read_next_token();
 
 					delete param1; delete param2;
 					return new ErrorNode{pos};
@@ -203,7 +200,7 @@ class Parser{
 		}
 
 		template <typename... T>
-		void expect(const T... tt)const noexcept{
+		bool expect(const T... tt)const noexcept{
 			static_assert(sizeof...(T) > 0);
 
 			if(((this->m_token != tt) && ...)){
@@ -216,11 +213,20 @@ class Parser{
 				oss << " expected).\n";
 
 				std::cerr << oss.str();
+				return false;
 			}
+
+			return true;
 		}
 
 		template <typename... T>
-		void debug_expect([[maybe_unused]] const T... tt)const noexcept{
+		inline void expect_and_read(const T... tt)noexcept{
+			if(this->expect(tt...))
+				this->read_next_token();
+		}
+
+		template <typename... T>
+		inline void debug_expect([[maybe_unused]] const T... tt)const noexcept{
 #			ifdef DEBUG
 				this->expect(tt...);
 #			endif
