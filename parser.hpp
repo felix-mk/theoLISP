@@ -11,6 +11,8 @@
 #include "token.hpp"
 #include "lexer.hpp"
 #include "ast_node.hpp"
+
+#include "args.hpp"
 #include "util.hpp"
 
 class Parser{
@@ -18,9 +20,11 @@ class Parser{
 		Token m_token;
 		Lexer m_lexer;
 
+		mutable bool m_ok;
+
 	public:
 		explicit Parser(const std::string& code)noexcept:
-			m_token{}, m_lexer{code}{
+			m_token{}, m_lexer{code}, m_ok{true}{
 		}
 
 		BaseNode* parse()noexcept{
@@ -44,7 +48,7 @@ class Parser{
 			this->expect_and_read(TokenType::L_PAR);
 
 			InstrListNode* list = new InstrListNode{pos};
-			while(this->m_token != TokenType::R_PAR && this->m_token != TokenType::CONTR_EOF){
+			while(this->m_token != TokenType::R_PAR && this->m_token != TokenType::CONTR_EOF && this->m_ok){
 				const TokenPosition prev_pos = this->m_token.pos();
 				list->add(this->parse_instr());
 
@@ -155,8 +159,7 @@ class Parser{
 				case TokenType::L_PAR:
 					this->read_next_token();
 					ret = this->parse_arith_exp();
-					this->expect(TokenType::R_PAR);
-					this->read_next_token();
+					this->expect_and_read(TokenType::R_PAR);
 					break;
 				default:
 					this->expect(
@@ -174,8 +177,7 @@ class Parser{
 			const TokenPosition pos = this->m_token.pos();
 			const TokenType arith_type = this->m_token.type();
 
-			this->debug_expect(TokenType::ADD, TokenType::SUB, TokenType::MUL);
-			this->read_next_token();
+			this->expect_and_read(TokenType::ADD, TokenType::SUB, TokenType::MUL);
 
 			BaseNode* const param1 = this->parse_exp();
 			BaseNode* const param2 = this->parse_exp();
@@ -188,12 +190,6 @@ class Parser{
 				case TokenType::MUL:
 					return new MulNode{param1, param2, pos};
 				default:
-					this->expect(
-						TokenType::ADD,
-						TokenType::SUB,
-						TokenType::MUL
-					);
-
 					delete param1; delete param2;
 					return new ErrorNode{pos};
 			}
@@ -213,7 +209,12 @@ class Parser{
 				oss << " expected).\n";
 
 				std::cerr << oss.str();
-				return false;
+
+				if(args.try_recovery_from_syntax_errors){
+					this->m_ok = false;
+					return false;
+				}else
+					std::exit(-1);
 			}
 
 			return true;
