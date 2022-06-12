@@ -18,8 +18,9 @@ struct CommandLineArguments{
 // Global command line arguments
 CommandLineArguments args{};
 
-static void print_ussage(const char* const prog_name)noexcept{
+static void print_ussage_and_exit(const char* const prog_name)noexcept{
 	std::clog << "usage: " << prog_name << " [<filename>] [--dump-ast] [--dump-sym] [--pythonify] [--interactive]\n";
+	std::exit(-1);
 }
 
 static void parse_args(const int argc, const char* const argv[])noexcept{
@@ -38,13 +39,14 @@ static void parse_args(const int argc, const char* const argv[])noexcept{
 		else if(!file_specified){
 			args.filename = arg;
 			file_specified = true;
-		}
+		}else
+			print_ussage_and_exit(*argv);
 	}
 
-	if(!file_specified && !args.interactive_mode){
-		print_ussage(*argv);
-		std::exit(-1);
-	}
+	// Either in interactive mode and no file
+	// or a file but not in interactive mode.
+	if(file_specified == args.interactive_mode)
+		print_ussage_and_exit(*argv);
 }
 
 #endif	// ARG_PARSER_HPP
