@@ -37,6 +37,7 @@ static void run_interactive_mode()noexcept{
 	std::string code{};
 	std::getline(std::cin, code, ';');
 
+	std::cout << '\n';
 	interpret(code);
 }
 
