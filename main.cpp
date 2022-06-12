@@ -34,14 +34,10 @@ static void interpret(const std::string& code)noexcept{
 }
 
 static void run_interactive_mode()noexcept{
-	while(true){
-		std::string code{};
+	std::string code{};
+	std::getline(std::cin, code, ';');
 
-		std::cin.sync();
-		std::getline(std::cin, code, ';');
-
-		interpret(code);
-	}
+	interpret(code);
 }
 
 static void run_filename_mode()noexcept{
