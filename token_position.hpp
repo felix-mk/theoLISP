@@ -33,7 +33,7 @@ class TokenPosition{
 		}
 
 		friend std::ostream& operator<< (std::ostream& os, const TokenPosition pos)noexcept{
-			return os << "col: " << pos.col() << ", ln: " << pos.line();
+			return os << "ln: " << pos.line() << ", col: " << pos.col();
 		}
 };
 
