@@ -12,13 +12,15 @@
 #include "arg_parser.hpp"
 
 static void interpret(const std::string& code)noexcept{
+	std::ostringstream oss{};
+
 	Parser parser{code};
 	SymbolTable sym_table{};
 
 	const Ast ast = parser.parse();
 	const IntType res = ast.eval(sym_table);
 
-	std::ostringstream oss{};
+	oss << "-> " << res << '\n';
 	if(args.dump_ast)
 		ast.dump(oss << '\n');
 
@@ -28,7 +30,6 @@ static void interpret(const std::string& code)noexcept{
 	if(args.pythonify)
 		ast.pythonify(oss << '\n');
 
-	oss << "\n-> " << res << '\n';
 	std::cout << oss.str();
 }
 
@@ -47,13 +48,11 @@ static void run_filename_mode()noexcept{
 	std::string code{};
 	std::ifstream file{args.filename};
 
-	if(!file){
+	if(file){
+		std::getline(file, code, '\0');
+		interpret(code);
+	}else
 		std::cerr << "error: Invalid filename \'" << args.filename << "\'.\n";
-		return;
-	}
-
-	std::getline(file, code, '\0');
-	interpret(code);
 }
 
 int main(int argc, const char* argv[]){

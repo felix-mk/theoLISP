@@ -19,11 +19,11 @@ class Lexer{
 		std::string::const_iterator m_it;
 		std::string::const_iterator m_end;
 
-		TokenPosition m_pos{};
+		TokenPosition m_pos;
 
 	public:
 		Lexer(const std::string& code)noexcept:
-			m_chr{'\0'}, m_it{code.cbegin()}, m_end{code.cend()}{
+			m_chr{'\0'}, m_it{code.cbegin()}, m_end{code.cend()}, m_pos{}{
 
 			if(this->m_it != this->m_end)
 				this->m_chr = *this->m_it;

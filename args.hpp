@@ -16,6 +16,6 @@ struct CommandLineArguments{
 };
 
 // Global command line arguments
-CommandLineArguments args{};
+static CommandLineArguments args{};
 
 #endif	// ARGS_HPP
