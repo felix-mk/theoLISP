@@ -15,16 +15,16 @@ class Ast{
 		Ast(BaseNode* const root)noexcept: m_root{root}{
 		}
 
-		IntType eval(SymbolTable& sym_table)const noexcept{
+		inline IntType eval(SymbolTable& sym_table)const noexcept{
 			this->m_root->eval(sym_table);
 			return sym_table.get_or_insert("result");
 		}
 
-		void pythonify(std::ostream& os)const noexcept{
+		inline void pythonify(std::ostream& os)const noexcept{
 			this->m_root->pythonify(os << "Python:\n", 0);
 		}
 
-		void dump(std::ostream& os)const noexcept{
+		inline void dump(std::ostream& os)const noexcept{
 			this->m_root->dump(os << "Ast:\n", 1);
 		}
 };

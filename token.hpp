@@ -47,8 +47,7 @@ static constexpr const char* const token_type_names[] = {
 	"SET",
 
 	"IF",
-	"WHILE"
-	
+	"WHILE"	
 };
 
 static inline const char* token_type_name(const TokenType tt)noexcept{
@@ -106,7 +105,7 @@ class Token{
 		}
 
 		friend inline bool operator!= (const Token& token, const TokenType tt)noexcept{
-			return !(token.type() == tt);
+			return !(token == tt);
 		}
 
 		friend std::ostream& operator<< (std::ostream& os, const Token& token)noexcept{

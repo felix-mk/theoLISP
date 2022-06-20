@@ -22,7 +22,7 @@ class Lexer{
 		TokenPosition m_pos;
 
 	public:
-		Lexer(const std::string& code)noexcept:
+		explicit Lexer(const std::string& code)noexcept:
 			m_chr{'\0'}, m_it{code.cbegin()}, m_end{code.cend()}, m_pos{}{
 
 			if(this->m_it != this->m_end)

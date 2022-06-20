@@ -23,20 +23,20 @@ class TokenPosition{
 			return this->m_line;
 		}
 
-		void inc_col()noexcept{
+		inline void inc_col()noexcept{
 			++this->m_col;
 		}
 
-		void inc_line()noexcept{
+		inline void inc_line()noexcept{
 			++this->m_line;
 			this->m_col = 0;
 		}
 
-		friend bool operator== (const TokenPosition& a, const TokenPosition& b)noexcept{
+		friend inline bool operator== (const TokenPosition& a, const TokenPosition& b)noexcept{
 			return a.col() == b.col() && a.line() == b.line();
 		}
 
-		friend bool operator!= (const TokenPosition& a, const TokenPosition& b)noexcept{
+		friend inline bool operator!= (const TokenPosition& a, const TokenPosition& b)noexcept{
 			return !(a == b);
 		}
 

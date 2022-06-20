@@ -16,11 +16,11 @@ class SymbolTable{
 		explicit SymbolTable()noexcept: m_table{}{
 		}
 
-		IntType get_or_insert(const std::string& symbol)noexcept{
+		inline IntType get_or_insert(const std::string& symbol)noexcept{
 			return this->m_table[symbol];
 		}
 
-		void update(const std::string& symbol, const IntType value)noexcept{
+		inline void update(const std::string& symbol, const IntType value)noexcept{
 			this->m_table[symbol] = value;
 		}
 

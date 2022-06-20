@@ -18,7 +18,7 @@ class BaseNode{
 		TokenPosition m_pos;
 
 	public:
-		BaseNode(const TokenPosition& pos)noexcept: m_pos{pos}{
+		explicit BaseNode(const TokenPosition& pos)noexcept: m_pos{pos}{
 		}
 
 		inline const TokenPosition& pos()const noexcept{
@@ -50,7 +50,7 @@ class BaseNode{
 
 class ErrorNode: public BaseNode{
 	public:
-		ErrorNode(const TokenPosition& pos)noexcept: BaseNode{pos}{
+		explicit ErrorNode(const TokenPosition& pos)noexcept: BaseNode{pos}{
 		}
 
 		IntType eval(SymbolTable& /*sym_table*/)const noexcept override{
@@ -360,7 +360,7 @@ class InstrListNode: public BaseNode{
 		std::list<std::unique_ptr<BaseNode>> m_list;
 
 	public:
-		InstrListNode(const TokenPosition& pos)noexcept:
+		explicit InstrListNode(const TokenPosition& pos)noexcept:
 			BaseNode{pos}, m_list{}{
 		}
 
