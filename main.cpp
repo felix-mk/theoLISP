@@ -12,15 +12,15 @@
 #include "arg_parser.hpp"
 
 static void interpret(const std::string& code)noexcept{
-	std::ostringstream oss{};
-
 	Parser parser{code};
 	SymbolTable sym_table{};
 
 	const Ast ast = parser.parse();
 	const IntType res = ast.eval(sym_table);
 
+	std::ostringstream oss{};
 	oss << "-> " << res << '\n';
+
 	if(args.dump_ast)
 		ast.dump(oss << '\n');
 

@@ -24,7 +24,7 @@ class SymbolTable{
 			this->m_table[symbol] = value;
 		}
 
-		void dump(std::ostream& os)noexcept{
+		void dump(std::ostream& os)const noexcept{
 			os << "SymTable:\n";
 			for(const auto& entry : this->m_table)
 				os << ' ' << entry.first << ": " << entry.second << '\n';

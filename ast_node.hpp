@@ -376,12 +376,12 @@ class InstrListNode: public BaseNode{
 		}
 
 		void pythonify(std::ostream& os, const uint16_t depth)const noexcept override{
-			for(const auto& elem : this->m_list)
-				elem->pythonify(os, depth);
-
 			if(0 == this->m_list.size()){
 				BaseNode::indent_n(os, depth);
 				os << "pass\n";
+			}else{
+				for(const auto& elem : this->m_list)
+					elem->pythonify(os, depth);
 			}
 		}
 
