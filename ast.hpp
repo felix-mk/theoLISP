@@ -12,19 +12,19 @@ class Ast{
 		std::unique_ptr<BaseNode> m_root;
 
 	public:
-		Ast(BaseNode* const root)noexcept: m_root{root}{
+		Ast(BaseNode* const root): m_root{root}{
 		}
 
-		inline IntType eval(SymbolTable& sym_table)const noexcept{
+		inline IntType eval(SymbolTable& sym_table)const{
 			this->m_root->eval(sym_table);
 			return sym_table.get_or_insert("result");
 		}
 
-		inline void pythonify(std::ostream& os)const noexcept{
+		inline void pythonify(std::ostream& os)const{
 			this->m_root->pythonify(os << "Python:\n", 0);
 		}
 
-		inline void dump(std::ostream& os)const noexcept{
+		inline void dump(std::ostream& os)const{
 			this->m_root->dump(os << "Ast:\n", 1);
 		}
 };

@@ -50,7 +50,7 @@ static constexpr const char* const token_type_names[] = {
 	"WHILE"	
 };
 
-static inline const char* token_type_name(const TokenType tt)noexcept{
+static inline const char* token_type_name(const TokenType tt){
 	return token_type_names[static_cast<uint8_t>(tt)];
 }
 
@@ -71,44 +71,44 @@ class Token{
 		TokenPosition m_pos{};
 
 	public:
-		explicit Token()noexcept: m_tt{}, m_value{}, m_pos{}{
+		explicit Token(): m_tt{}, m_value{}, m_pos{}{
 		}
 
-		inline TokenType type()const noexcept{
+		inline TokenType type()const{
 			return this->m_tt;
 		}
 
-		inline const std::string_view& value()const noexcept{
+		inline const std::string_view& value()const{
 			return this->m_value;
 		}
 
-		inline const char* name()const noexcept{
+		inline const char* name()const{
 			return token_type_name(this->m_tt);
 		}
 
-		inline TokenPosition pos()const noexcept{
+		inline TokenPosition pos()const{
 			return this->m_pos;
 		}
 
-		inline void set(const TokenType tt, const TokenPosition pos)noexcept{
+		inline void set(const TokenType tt, const TokenPosition pos){
 			this->set(tt, std::string_view{}, pos);
 		}
 
-		inline void set(const TokenType tt, const std::string_view value, const TokenPosition pos)noexcept{
+		inline void set(const TokenType tt, const std::string_view value, const TokenPosition pos){
 			this->m_tt = tt;
 			this->m_value = value;
 			this->m_pos = pos;
 		}
 
-		friend inline bool operator== (const Token& token, const TokenType tt)noexcept{
+		friend inline bool operator== (const Token& token, const TokenType tt){
 			return token.type() == tt;
 		}
 
-		friend inline bool operator!= (const Token& token, const TokenType tt)noexcept{
+		friend inline bool operator!= (const Token& token, const TokenType tt){
 			return !(token == tt);
 		}
 
-		friend std::ostream& operator<< (std::ostream& os, const Token& token)noexcept{
+		friend std::ostream& operator<< (std::ostream& os, const Token& token){
 			return os << token.name() << " [" << token.value() << "] (" << token.pos() << ')';
 		}
 };

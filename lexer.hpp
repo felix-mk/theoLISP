@@ -22,14 +22,14 @@ class Lexer{
 		TokenPosition m_pos;
 
 	public:
-		explicit Lexer(const std::string& code)noexcept:
+		explicit Lexer(const std::string& code):
 			m_chr{'\0'}, m_it{code.cbegin()}, m_end{code.cend()}, m_pos{}{
 
 			if(this->m_it != this->m_end)
 				this->m_chr = *this->m_it;
 		}
 
-		void read_next_token(Token& token)noexcept{
+		void read_next_token(Token& token){
 			while(true){
 				switch(this->m_chr){
 					case '\n':
@@ -106,7 +106,7 @@ class Lexer{
 		}
 
 	private:
-		inline void read_next_char()noexcept{
+		inline void read_next_char(){
 			this->m_pos.inc_col();
 			this->m_chr = (this->m_it != this->m_end) ? *++this->m_it : '\0';
 		}

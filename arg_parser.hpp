@@ -7,14 +7,14 @@
 
 #include "args.hpp"
 
-static void print_ussage_and_exit(const char* const prog_name)noexcept{
+static void print_ussage_and_exit(const char* const prog_name){
 	std::clog << "usage: " << prog_name
 			  << " [<filename>] [--interactive] [--dump-ast] [--dump-sym] [--pythonify] [--try-recovery-from-syntax-errors]\n";
 
 	std::exit(0);
 }
 
-static void parse_args(const int argc, const char* const argv[])noexcept{
+static void parse_args(const int argc, const char* const argv[]){
 	bool file_specified = false;
 	for(int arg_idx = 1; arg_idx < argc; ++arg_idx){
 		const std::string arg = argv[arg_idx];

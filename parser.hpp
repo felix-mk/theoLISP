@@ -23,11 +23,11 @@ class Parser{
 		mutable bool m_ok;
 
 	public:
-		explicit Parser(const std::string& code)noexcept:
+		explicit Parser(const std::string& code):
 			m_token{}, m_lexer{code}, m_ok{true}{
 		}
 
-		BaseNode* parse()noexcept{
+		BaseNode* parse(){
 			this->read_next_token();
 			BaseNode* const root = this->parse_start();
 			this->expect(TokenType::CONTR_EOF);
@@ -37,12 +37,12 @@ class Parser{
 
 	private:
 		// start ::= instr_list;
-		inline BaseNode* parse_start()noexcept{
+		inline BaseNode* parse_start(){
 			return this->parse_instr_list();
 		}
 
 		// instr_list ::= '(' {instr} ')';
-		BaseNode* parse_instr_list()noexcept{
+		BaseNode* parse_instr_list(){
 			const TokenPosition pos = this->m_token.pos();
 
 			this->expect_and_read(TokenType::L_PAR);
@@ -62,7 +62,7 @@ class Parser{
 		}
 
 		// instr ::= '(' (assign | cond | loop) ')';
-		BaseNode* parse_instr()noexcept{
+		BaseNode* parse_instr(){
 			BaseNode* ret{};
 
 			this->expect_and_read(TokenType::L_PAR);
@@ -92,7 +92,7 @@ class Parser{
 		}
 
 		// assign ::= 'set' ident exp;
-		BaseNode* parse_assign()noexcept{
+		BaseNode* parse_assign(){
 			const TokenPosition pos = this->m_token.pos();
 
 			this->debug_expect(TokenType::SET);
@@ -111,7 +111,7 @@ class Parser{
 		}
 
 		// cond ::= 'if' exp instr_list instrs_list;
-		BaseNode* parse_cond()noexcept{
+		BaseNode* parse_cond(){
 			const TokenPosition pos = this->m_token.pos();
 
 			this->debug_expect(TokenType::IF);
@@ -125,7 +125,7 @@ class Parser{
 		}
 
 		// loop ::= 'while' exp instr_list;
-		BaseNode* parse_loop()noexcept{
+		BaseNode* parse_loop(){
 			const TokenPosition pos = this->m_token.pos();
 
 			this->debug_expect(TokenType::WHILE);
@@ -140,7 +140,7 @@ class Parser{
 		// exp ::= integer | ident | '(' arith_exp ')';
 		// ident	::= ('a' | ... | 'z') {'a' | ... | 'z' | '0' | ... | '9'};
 		// integer	::= '0' | (('1' | ... | '9') {'0' | ... | '9'});
-		BaseNode* parse_exp()noexcept{
+		BaseNode* parse_exp(){
 			BaseNode* ret{};
 			const TokenPosition pos = this->m_token.pos();
 
@@ -173,7 +173,7 @@ class Parser{
 		}
 
 		// arith_exp ::= ('add' | 'sub' | 'mul') exp exp;
-		BaseNode* parse_arith_exp()noexcept{
+		BaseNode* parse_arith_exp(){
 			const TokenPosition pos = this->m_token.pos();
 			const TokenType arith_type = this->m_token.type();
 
@@ -196,7 +196,7 @@ class Parser{
 		}
 
 		template <typename... T>
-		bool expect(const T... tt)const noexcept{
+		bool expect(const T... tt)const{
 			static_assert(sizeof...(T) > 0);
 
 			if(((this->m_token != tt) && ...)){
@@ -221,19 +221,19 @@ class Parser{
 		}
 
 		template <typename... T>
-		inline void expect_and_read(const T... tt)noexcept{
+		inline void expect_and_read(const T... tt){
 			if(this->expect(tt...))
 				this->read_next_token();
 		}
 
 		template <typename... T>
-		inline void debug_expect([[maybe_unused]] const T... tt)const noexcept{
+		inline void debug_expect([[maybe_unused]] const T... tt)const{
 #			ifdef DEBUG
 				this->expect(tt...);
 #			endif
 		}
 
-		inline void read_next_token()noexcept{
+		inline void read_next_token(){
 			this->m_lexer.read_next_token(this->m_token);
 		}
 };

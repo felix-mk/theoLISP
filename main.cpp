@@ -11,7 +11,7 @@
 
 #include "arg_parser.hpp"
 
-static void interpret(const std::string& code)noexcept{
+static void interpret(const std::string& code){
 	Parser parser{code};
 	SymbolTable sym_table{};
 
@@ -33,7 +33,7 @@ static void interpret(const std::string& code)noexcept{
 	std::cout << oss.str();
 }
 
-static void run_interactive_mode()noexcept{
+static void run_interactive_mode(){
 	std::string code{};
 	std::getline(std::cin, code, ';');
 
@@ -41,7 +41,7 @@ static void run_interactive_mode()noexcept{
 	interpret(code);
 }
 
-static void run_filename_mode()noexcept{
+static void run_filename_mode(){
 	std::string code{};
 	std::ifstream file{args.filename};
 

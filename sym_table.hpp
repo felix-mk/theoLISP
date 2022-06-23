@@ -13,18 +13,18 @@ class SymbolTable{
 		std::unordered_map<std::string, IntType> m_table;
 
 	public:
-		explicit SymbolTable()noexcept: m_table{}{
+		explicit SymbolTable(): m_table{}{
 		}
 
-		inline IntType get_or_insert(const std::string& symbol)noexcept{
+		inline IntType get_or_insert(const std::string& symbol){
 			return this->m_table[symbol];
 		}
 
-		inline void update(const std::string& symbol, const IntType value)noexcept{
+		inline void update(const std::string& symbol, const IntType value){
 			this->m_table[symbol] = value;
 		}
 
-		void dump(std::ostream& os)const noexcept{
+		void dump(std::ostream& os)const{
 			os << "SymTable:\n";
 			for(const auto& entry : this->m_table)
 				os << ' ' << entry.first << ": " << entry.second << '\n';

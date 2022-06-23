@@ -6,7 +6,7 @@ HEADERS	:= $(wildcard *.hpp)
 MAKEFILE := makefile
 
 CXX			:= g++
-CXXFLAGS	:= -Wall -Wextra -Wpedantic -Werror -std=c++1z -O3 -march=native
+CXXFLAGS	:= -Wall -Wextra -Wpedantic -Werror -std=c++1z -fno-exceptions -O3 -march=native
 
 $(TARGET): $(MAIN) $(HEADERS) $(MAKEFILE)
 	$(CXX) $(CXXFLAGS) $(MAIN) -o $(TARGET)
